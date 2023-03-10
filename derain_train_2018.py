@@ -172,11 +172,11 @@ criterionCAE.cuda()
 target, input, depth, ato = target.cuda(), input.cuda(), depth.cuda(), ato.cuda()
 val_target, val_input, val_depth, val_ato = val_target.cuda(), val_input.cuda(), val_depth.cuda(), val_ato.cuda()
 
-target = Variable(target)
-input = Variable(input)
+# target = Variable(target)
+# input = Variable(input)
 # input = Variable(input,requires_grad=False)
 # depth = Variable(depth)
-ato = Variable(ato)
+# ato = Variable(ato)
 
 # Initialize VGG-16
 vgg = Vgg16()
@@ -185,7 +185,7 @@ vgg.load_state_dict(torch.load(os.path.join('./models/', "vgg16.weight")))
 vgg.cuda()
 
 
-label_d = Variable(label_d.cuda())
+label_d = label_d.cuda()
 
 # get randomly sampled validation images and save it
 val_iter = iter(valDataloader)
@@ -219,7 +219,7 @@ for epoch in range(opt.niter):
 
     target_cpu, input_cpu = target_cpu.float().cuda(), input_cpu.float().cuda()
     label_cpu=label_cpu.long().cuda()
-    label_cpu=Variable(label_cpu)
+    #label_cpu=Variable(label_cpu)
 
 
     # get paired data
@@ -240,7 +240,7 @@ for epoch in range(opt.niter):
     # L_res = lambdaIMG * L_res_
     L_img = lambdaIMG * L_img_
 
-    if lambdaIMG <> 0:
+    if lambdaIMG != 0:
       #L_img.backward(retain_graph=True) # in case of current version of pytorch
       L_img.backward(retain_variables=True)
       # L_res.backward(retain_variables=True)

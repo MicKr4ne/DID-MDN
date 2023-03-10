@@ -1,7 +1,7 @@
 from __future__ import print_function
 import argparse
 import os
-import sys
+# import sys
 import random
 import torch
 import torch.nn as nn
@@ -10,16 +10,16 @@ import torch.backends.cudnn as cudnn
 cudnn.benchmark = True
 cudnn.fastest = True
 import torch.optim as optim
-import torchvision.utils as vutils
+# import torchvision.utils as vutils
 from torch.autograd import Variable
 
 from misc import *
 import models.derain_residual  as net2
 import models.derain_dense  as net1
 
-from myutils.vgg16 import Vgg16
-from myutils import utils
-import pdb
+# from myutils.vgg16 import Vgg16
+# from myutils import utils
+# import pdb
 
 # Pre-defined Parameters
 parser = argparse.ArgumentParser()
@@ -140,14 +140,14 @@ val_ato = torch.FloatTensor(opt.valBatchSize, inputChannelSize, opt.imageSize, o
 target, input, depth, ato = target.cuda(), input.cuda(), depth.cuda(), ato.cuda()
 val_target, val_input, val_depth, val_ato = val_target.cuda(), val_input.cuda(), val_depth.cuda(), val_ato.cuda()
 
-target = Variable(target, volatile=True)
-input = Variable(input,volatile=True)
-depth = Variable(depth,volatile=True)
-ato = Variable(ato,volatile=True)
+# target = Variable(target, volatile=True)
+# input = Variable(input,volatile=True)
+# depth = Variable(depth,volatile=True)
+# ato = Variable(ato,volatile=True)
 
 
 
-label_d = Variable(label_d.cuda())
+label_d = label_d.cuda()
 
 
 
@@ -197,19 +197,19 @@ for epoch in range(1):
       val_batch_output = torch.FloatTensor(val_input.size()).fill_(0)
 
       val_input.resize_as_(val_input_cpu).copy_(val_input_cpu)
-      val_target=Variable(val_target_cpu, volatile=True)
+      val_target=val_target_cpu
 
 
       z=0
       label_cpu = torch.FloatTensor(opt.batchSize).fill_(z)
       label_cpu = label_cpu.long().cuda()
-      label_cpu = Variable(label_cpu)
+      # label_cpu = Variable(label_cpu)
 
 
 
       for idx in range(val_input.size(0)):
         single_img = val_input[idx,:,:,:].unsqueeze(0)
-        val_inputv = Variable(single_img, volatile=True)
+        val_inputv = single_img
 
 
         output = residue_net(val_inputv, label_cpu)
