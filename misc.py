@@ -26,18 +26,13 @@ def getLoader(datasetName, dataroot, originalSize, imageSize, batchSize=64, work
 
   #import pdb; pdb.set_trace()
   if datasetName == 'pix2pix':
-    # from datasets.pix2pix import pix2pix as commonDataset
-    # import transforms.pix2pix as transforms
     from datasets.pix2pix import pix2pix as commonDataset
     import transforms.pix2pix as transforms
   elif datasetName == 'pix2pix_val':
-    # from datasets.pix2pix_val import pix2pix_val as commonDataset
-    # import transforms.pix2pix as transforms
     from datasets.pix2pix_val import pix2pix_val as commonDataset
     import transforms.pix2pix as transforms
+    
   if datasetName == 'pix2pix_class':
-    # from datasets.pix2pix import pix2pix as commonDataset
-    # import transforms.pix2pix as transforms
     from datasets.pix2pix_class import pix2pix as commonDataset
     import transforms.pix2pix as transforms
   if split == 'train':

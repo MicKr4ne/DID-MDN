@@ -2,4 +2,5 @@
 *.pyc
 *.pth
 *.log
+*.png
 DID-MDN.code-workspace

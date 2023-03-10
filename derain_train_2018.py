@@ -1,6 +1,6 @@
 from __future__ import print_function
 import argparse
-import os
+# import os
 import sys
 import random
 import torch
@@ -15,12 +15,12 @@ from torch.autograd import Variable
 
 from misc import *
 import models.derain_dense as net
-
+import torchvision.models as models
 
 
 from myutils.vgg16 import Vgg16
-from myutils import utils
-import pdb
+# from myutils import utils
+# import pdb
 import torch.nn.functional as F
 
 
@@ -57,7 +57,7 @@ parser.add_argument('--wd', type=float, default=0.0000, help='weight decay in D'
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam')
 parser.add_argument('--netG', default='', help="path to netG (to continue training)")
 parser.add_argument('--netD', default='', help="path to netD (to continue training)")
-parser.add_argument('--workers', type=int, help='number of data loading workers', default=1)
+parser.add_argument('--workers', type=int, help='number of data loading workers', default=0)
 parser.add_argument('--exp', default='sample', help='folder to output images and model checkpoints')
 parser.add_argument('--display', type=int, default=5, help='interval for displaying train-logs')
 parser.add_argument('--evalIter', type=int, default=500, help='interval for evauating(generating) images from valDataroot')
@@ -179,17 +179,25 @@ val_target, val_input, val_depth, val_ato = val_target.cuda(), val_input.cuda(),
 # ato = Variable(ato)
 
 # Initialize VGG-16
-vgg = Vgg16()
-utils.init_vgg16('./models/')
-vgg.load_state_dict(torch.load(os.path.join('./models/', "vgg16.weight")))
+# vgg = Vgg16()
+# utils.init_vgg16('./models/')
+# vgg.load_state_dict(torch.load(os.path.join('./models/', "vgg16.weight")))
+# vgg.cuda()
+
+
+vgg = models.vgg16()
+#download pre-trained model from https://download.pytorch.org/models/vgg16-397923af.pth
+vgg.load_state_dict(torch.load('./models/vgg16-397923af.pth'))
 vgg.cuda()
 
 
 label_d = label_d.cuda()
 
 # get randomly sampled validation images and save it
-val_iter = iter(valDataloader)
-data_val = val_iter.next()
+# val_iter = iter(valDataloader)
+# data_val = val_iter.next()
+
+data_val = next(iter(valDataloader))
 
 val_input_cpu, val_target_cpu, label = data_val
 
@@ -247,7 +255,7 @@ for epoch in range(opt.niter):
 
     # Perceptual Loss 1
     features_content = vgg(target)
-    f_xc_c = Variable(features_content[1].data, requires_grad=False)
+    f_xc_c = features_content[1].data
 
     features_y = vgg(x_hat)
     content_loss =  1.8*lambdaIMG* criterionCAE(features_y[1], f_xc_c)
@@ -255,7 +263,7 @@ for epoch in range(opt.niter):
 
     # Perceptual Loss 2
     features_content = vgg(target)
-    f_xc_c = Variable(features_content[0].data, requires_grad=False)
+    f_xc_c = features_content[0].data
 
     features_y = vgg(x_hat)
     content_loss1 =  1.8*lambdaIMG* criterionCAE(features_y[0], f_xc_c)

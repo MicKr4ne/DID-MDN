@@ -50,13 +50,13 @@ class pix2pix(data.Dataset):
     # index = np.random.randint(self.__len__(), size=1)[0]
 
     # index_folder = np.random.randint(1,4)
-    index_folder = np.random.randint(0,1)
+    # index_folder = np.random.randint(0,1)
 
-    index_sub = np.random.randint(2, 5)
+    # index_sub = np.random.randint(2, 5)
 
-    label=index_folder
-
-
+    #label=index_folder
+    label = 1
+    '''
     if index_folder==0:
         path='/home/openset/Desktop/derain2018/facades/training2'+'/'+str(index)+'.jpg'
 
@@ -82,11 +82,11 @@ class pix2pix(data.Dataset):
       if index_sub==4:
         index = np.random.randint(0,400)
         path='/home/openset/Desktop/derain2018/facades/DB_Rain/Rain_Light/trainnew'+'/'+str(index)+'.jpg'
-
+    '''
 
 
     # img = self.loader(path)
-
+    path = self.imgs[index]
     img = self.loader(path)
 
     # NOTE: img -> PIL Image
